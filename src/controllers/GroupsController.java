@@ -13,7 +13,7 @@ public class GroupsController {
 	GroupsService gs = new GroupsService();
 	public void joinGroup(){
 		gs.joinGroup();
-		
+
 	}
 
 	public void createGroup() {
@@ -31,9 +31,9 @@ public class GroupsController {
 		try {
 			gs.createGroup(groups);
 		} catch (SQLException sqlException)
-			{
-				sqlException.printStackTrace();
-			}
+		{
+			sqlException.printStackTrace();
+		}
 	}
 
 	public void addAdmin(){
