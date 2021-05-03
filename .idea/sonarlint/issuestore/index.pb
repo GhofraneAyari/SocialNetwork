@@ -11,3 +11,5 @@ O
 src/services/MemberService.java,2/1/21e5e25f1f45118c67a4e8160c248c8630019b18
 O
 src/services/GroupsService.java,d/4/d448276b40069f7b93af33c96869c1f3b11f8334
+U
+%src/controllers/MemberController.java,7/8/787bb59dbba870cc48d21645d7a86aa8584dc9e4

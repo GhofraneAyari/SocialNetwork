@@ -1,10 +1,13 @@
 package services;
 import models.Member;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Scanner;
+
+import com.mysql.jdbc.PreparedStatement;
 
 import utils.Cache;
 import utils.SingletonDatabaseConnection;
@@ -18,13 +21,15 @@ public class MemberService {
 	{
 		
 		try {
-			 
+			
 			Connection cnx= SingletonDatabaseConnection.getInstance().cnx ; 
 			Statement stmt=cnx.createStatement(); 
 			ResultSet rs=stmt.executeQuery("select * from user where login='"+login+"'and password='"+password+"';");  
 			
 			if(rs.next()) {
 				currentUser.setMember_id(rs.getInt(1));
+				currentUser.setFirstName(rs.getString(2));
+				currentUser.setLastName(rs.getString(3));
 				Cache.member = currentUser;
 				return true;
 				
@@ -45,7 +50,6 @@ public class MemberService {
 
 	public void sendFriendRequest()
 	{
-		System.out.println("----------"+Cache.member.getMember_id());
 		try {
 			Connection cnx= SingletonDatabaseConnection.getInstance().cnx ; 
 			Statement stmt=cnx.createStatement();
@@ -63,7 +67,7 @@ public class MemberService {
 							"                       AND g.sender = " + currentUser.getMember_id() +
 							"                  )" +
 							"   AND u.userId <> "+ currentUser.getMember_id() +";" );
-			System.out.println("Here is the list of members on the social network:\n");
+			System.out.println("Here is the list of members available on the network:\n");
 			System.out.println("ID"+"\t"+"First Name"+"\t"+"Last Name"+"\t"+"Birthday"+"\t "+"City");
 			while(rs.next())
 			{
@@ -96,11 +100,8 @@ public class MemberService {
 			Connection cnx= SingletonDatabaseConnection.getInstance().cnx ; 
 			Statement stmt=cnx.createStatement();
 			ResultSet rs=stmt.executeQuery("SELECT relationshipId, user.firstName, user.lastName, status from relationship, user WHERE relationship.sender = user.userId and status=0 and receiver ="+ currentUser.getMember_id());
-			System.out.println("Would you like to consult your friends requests?(Y/N)");
 			Scanner input = new Scanner(System.in);
-			String yesNo = input.nextLine();
-			if(yesNo.equals("Y") || yesNo.equals("y")) {
-				if(rs.next() == false) {
+			if(rs.next() == false) {
 					System.out.println("You do not have any pending friends requests!");
 			
 			}else
@@ -131,10 +132,8 @@ public class MemberService {
 			}
 		
 		
-			}
-			else {
-				System.out.println("Okay, maybe later!");
-			}
+			
+			
 			
 			
 			
@@ -145,4 +144,84 @@ public class MemberService {
 		
 		
 	}
-} 
+
+
+
+
+	public void membersFriends()
+	{
+		try {
+			Connection cnx= SingletonDatabaseConnection.getInstance().cnx ;
+			ResultSet rs;
+			Statement stmt=cnx.createStatement();
+			String req ="SELECT user.userId, user.firstName, user.lastName FROM user, relationship WHERE (relationship.status =1 AND ((relationship.receiver = user.userId AND relationship.sender= "+Cache.member.getMember_id()+") OR (relationship.receiver= "+Cache.member.getMember_id()+" AND relationship.sender = user.userId ))) ;";
+			rs = stmt.executeQuery(req);
+			while(rs.next())
+			{
+				System.out.println(rs.getInt(1)+"\t \t "+rs.getString(2)+"\t \t "+rs.getString(3));
+			}
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void friendsNotAdminInGroup(int idGroup)
+	{
+		try {
+			Connection cnx= SingletonDatabaseConnection.getInstance().cnx ;
+			ResultSet rs;
+			Statement stmt=cnx.createStatement();
+			String req ="SELECT user.userId, user.firstName, user.lastName FROM user, relationship WHERE (relationship.status =1 AND ((relationship.receiver = user.userId AND relationship.sender= "+Cache.member.getMember_id()+") OR (relationship.receiver= "+Cache.member.getMember_id()+" AND relationship.sender = user.userId" +
+					" AND NOT EXISTS (SELECT 1 FROM groupmanager WHERE groupId = "+ idGroup +" AND 	userId = "+ Cache.member.getMember_id()+" ) ))) ;";
+
+			rs = stmt.executeQuery(req);
+			while(rs.next())
+			{
+				System.out.println(rs.getInt(1)+"\t \t "+rs.getString(2)+"\t \t "+rs.getString(3));
+			}
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	//add message on the wall
+	public int addToWall(int userWallId, String content) {
+		Connection cnx= SingletonDatabaseConnection.getInstance().cnx;
+		try (Statement stmt1 = cnx.createStatement()) {
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			java.util.Date utilDate = new java.util.Date();
+			String dateTime = format.format(utilDate.getTime());
+			return stmt1.executeUpdate("INSERT INTO post(creator, wall_user_id, creationTime, content) " +
+					"VALUES(" + Cache.member.getMember_id() + ", " + userWallId + " ,  '" + dateTime + "', '"+ content +"');");
+		}
+		catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		}
+		return 0;
+	}
+
+	public void consultFriendTimelineById(int userwallId) {
+		try {
+			Connection cnx= SingletonDatabaseConnection.getInstance().cnx ;
+			ResultSet rs;
+			Statement stmt=cnx.createStatement();
+			String req ="SELECT post.creationTime, user.firstName, user.lastName, post.content FROM post, user WHERE user.userId = post.creator AND post.wall_user_id = "+userwallId;
+			rs = stmt.executeQuery(req);
+			int count = 0;
+			while(rs.next())
+			{
+				count++;
+				System.out.println(rs.getDate(1)+"\t \t "+rs.getString(2)+"\t \t "+rs.getString(3)+"\t \t "+rs.getString(4));
+			}
+			if (count == 0) {
+				System.out.println("sorry this user don't have any post on his timeline");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
