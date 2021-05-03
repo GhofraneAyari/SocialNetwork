@@ -18,6 +18,13 @@ public class Groups extends SNS {
 		public void setGroupName(String groupName) {
 			this.groupName = groupName;
 		}
-		
-	
+
+	@Override
+	public String toString() {
+		return 	"groupId=" + groupId +
+				", groupName='" + groupName + '\'' +
+				", creationDate=" + creationDate +
+				", creator=" + creator.getMember_id() +
+				", genre='" + genre + '\'';
+	}
 }

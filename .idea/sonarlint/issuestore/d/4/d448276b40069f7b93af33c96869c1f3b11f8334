@@ -1,14 +1,8 @@
 
-S	java:S106"9Replace this use of System.out or System.err by a logger.(¬ƒ™á8Û¨€¬/
-X	java:S106"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ8Û¨€¬/
-X	java:S106"9Replace this use of System.out or System.err by a logger.(”°‚Ãıÿÿÿÿ8Û¨€¬/
-g
-java:S2095"GUse try-with-resources or close this "Statement" in a "finally" clause.(¢Õş¾ÿÿÿÿÿ8Û¨€¬/
-S	java:S106"9Replace this use of System.out or System.err by a logger.(”¶œÆ8Û¨€¬/
-X	java:S106"9Replace this use of System.out or System.err by a logger.(ó”½†úÿÿÿÿ8Û¨€¬/
-X	java:S106"9Replace this use of System.out or System.err by a logger.(Ş¯Å‚üÿÿÿÿ8Û¨€¬/
-g
-java:S2095"GUse try-with-resources or close this "Statement" in a "finally" clause.(ÚÀÊ…ıÿÿÿÿ8Û¨€¬/
-X	java:S106"9Replace this use of System.out or System.err by a logger.(ì·î‘úÿÿÿÿ8Û¨€¬/
-X	java:S106"9Replace this use of System.out or System.err by a logger.(èÂ«Ìıÿÿÿÿ8Û¨€¬/
-X	java:S106"9Replace this use of System.out or System.err by a logger.(™çšùÿÿÿÿ8Û¨€¬/
+i
+java:S2095"GUse try-with-resources or close this "Statement" in a "finally" clause.(¢Õş¾ÿÿÿÿÿ8Û¨€¬/
+i
+java:S2095%"GUse try-with-resources or close this "Statement" in a "finally" clause.(ÚÀÊ…ıÿÿÿÿ8Û¨€¬/
+R
+java:S1128"0Remove this unused import 'java.time.LocalDate'.(›‘¬èıÿÿÿÿ8Éé…×‘/
+X	java:S125J"<This block of commented-out lines of code should be removed.(€ÄüÑ8’»Õ‘/

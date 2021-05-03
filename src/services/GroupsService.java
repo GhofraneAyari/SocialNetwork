@@ -1,7 +1,13 @@
 package services;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 import models.Groups;
+import models.Member;
+import sun.security.util.ArrayUtil;
 import utils.Cache;
 import utils.SingletonDatabaseConnection;
 
@@ -56,14 +62,6 @@ public class GroupsService {
 
 	}
 
-	public int addAdmin(int idUser, int idGroup) throws SQLException {
-		Connection cnx= SingletonDatabaseConnection.getInstance().cnx;
-		try (Statement stmt1 = cnx.createStatement()) {
-			return stmt1.executeUpdate("INSERT INTO groupmanager( groupId , userId ) " +
-					"VALUES(" + idGroup + "," + idUser + ");");
-		}
-
-	}
 	public int createGroup(Groups groups) throws SQLException{
 		Connection cnx= SingletonDatabaseConnection.getInstance().cnx;
 		try (Statement stmt1 = cnx.createStatement()) {
@@ -72,5 +70,64 @@ public class GroupsService {
 		}
 		//addAdmin(Cache.member.getMember_id(), 2);
 	}
-	//add message on the wall
+	public int deleteGroup(int groupId) {
+		Connection cnx= SingletonDatabaseConnection.getInstance().cnx;
+		try (Statement stmt1 = cnx.createStatement()) {
+			return stmt1.executeUpdate("DELETE FROM groups WHERE groupId = "+groupId);
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		}
+		return 0;
+	}
+	public int deleteMemberFromGroup(int groupId, int memberId) {
+		Connection cnx= SingletonDatabaseConnection.getInstance().cnx;
+		try (Statement stmt1 = cnx.createStatement()) {
+			return stmt1.executeUpdate("DELETE FROM groupmembers WHERE groupId = "+groupId+" AND userId = "+memberId);
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		}
+		return 0;
+	}
+	public int addAdmin(int idUser, int idGroup)  {
+		Connection cnx= SingletonDatabaseConnection.getInstance().cnx;
+		try (Statement stmt1 = cnx.createStatement()) {
+			return stmt1.executeUpdate("INSERT INTO groupmanager( groupId , userId ) " +
+					"VALUES(" + idGroup + "," + idUser + ");");
+		}catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		}
+		return 0;
+	}
+	public int deleteAdmin(int idAdmin, int groupId) {
+		Connection cnx= SingletonDatabaseConnection.getInstance().cnx;
+		try (Statement stmt1 = cnx.createStatement()) {
+			return stmt1.executeUpdate("DELETE FROM groupmanager WHERE groupId = "+groupId+" AND userId = "+idAdmin);
+		} catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		}
+		return 0;
+	}
+	public List<Groups> getGroupsWhereLoggedInUserIsAdmin() {
+		Connection cnx= SingletonDatabaseConnection.getInstance().cnx;
+		ArrayList<Groups> groups = new ArrayList<>();
+		String req = "SELECT groups.groupId, groups.groupCreator, groups.groupName, groups.genre, groups.groupCreationDate from groupmanager, groups WHERE groups.groupId = groupmanager.groupId AND groupmanager.userId = "+Cache.member.getMember_id();
+		try (Statement stmt1 = cnx.createStatement()) {
+			ResultSet rs = stmt1.executeQuery(req);
+			while (rs.next()) {
+				Groups group = new Groups();
+				group.setGroupId(rs.getInt(1));
+				Member member = new Member();
+				member.setMember_id(rs.getInt(2));
+				group.setCreator(member);
+				group.setGroupName(rs.getString(3));
+				group.setGenre(rs.getString(4));
+				group.setCreationDate(rs.getDate(5).toLocalDate());
+				groups.add(group);
+			}
+			return groups;
+		}catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+		}
+	return Collections.emptyList();
+	}
 }
