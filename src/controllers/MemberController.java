@@ -1,8 +1,8 @@
 package controllers;
 
 import java.util.Scanner;
-
 import services.MemberService;
+
 
 public class MemberController {
     MemberService ms = new MemberService();
@@ -18,6 +18,8 @@ public class MemberController {
             login = input.nextLine();
             System.out.print("Password: \n");
             password = input.nextLine();
+          
+           
             loginResult = ms.login(login, password);
             count++;
             if (!loginResult) {
@@ -26,14 +28,14 @@ public class MemberController {
                     System.out.println("Please try again...");
                 }
             } else {
-                System.out.println("Login Success!");
-                System.out.println("==========================================================================>");
-                System.out.println("\n ");
+                System.out.println("Login Successful!");
+                //System.out.println("==========================================================================>");
+               
             }
         } while (!loginResult && count < 3);
 
         if (!loginResult) {
-            System.out.println("You have entered wrong three times. Please try again in a few hours");
+            System.out.println("You have entered wrong three times. Please try again later!");
             System.out.println("==========================================================================>");
             return false;
         }
@@ -47,4 +49,25 @@ public class MemberController {
     public void acceptDenyRequest() {
         ms.acceptDenyFriendRequest();
     }
+    public void friendsLt()
+    {
+		System.out.println("Your Friends List:");
+		ms.membersFriends();
+		
+    	
+    }
+    public int addPostToWall(){
+        Scanner inputInt = new Scanner(System.in);
+        Scanner inputString = new Scanner(System.in);
+
+        System.out.println("please choose the id of the friend friend timeline you want to write on:");
+        ms.membersFriends();
+        int userWallId = inputInt.nextInt();
+
+        System.out.println("please choose the content of your msg:");
+        String content = inputString.nextLine();
+
+        return ms.addToWall(userWallId,content);
+    }
+
 }

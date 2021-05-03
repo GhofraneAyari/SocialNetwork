@@ -1,0 +1,75 @@
+import java.util.Scanner;
+
+import controllers.*;
+
+public class SocialNetwork {
+
+	public static void main(String[] args) {
+		MemberController mc = new MemberController();
+		System.out.println("\t---------- ** WELCOME ** ----------\t \n");
+		System.out.println("\n");
+		System.out.println("\t \t--Login Form--");
+		System.out.println("---------------------------------------------");
+		mc.login();
+		System.out.println("---------------------------------------------");
+		System.out.println("\t \t--Dashboard--");
+		System.out.println("\n");
+		System.out.println("    1)FRIENDS       2)PAGES       3)GROUPS");
+		System.out.println("\n");
+		System.out.println("What would you like to consult?");
+		Scanner input1 = new Scanner(System.in);
+		int operator = input1.nextInt();
+		switch(operator)
+		{
+			case 1:
+				System.out.println("\t \t--Friends--");
+				//mc.friendsLt();
+				System.out.println("\n");
+				System.out.println(" a) Consult Friends Requests \t \t b) Send Friend Request");
+				System.out.println(" c) Write On A Friend's Timeline\t  d) Search");
+				System.out.println("\nChoice: ");
+				Scanner input2 = new Scanner(System.in);
+				String choice = input2.nextLine();
+				if ( choice.equals("a"))
+				{
+					mc.acceptDenyRequest();
+					
+				}
+				if ( choice.equals("b"))
+				{
+					mc.sendFriendRequest();
+					
+				}
+				if ( choice.equals("c"))
+				{
+					//post
+					
+				}
+				if ( choice.equals("d"))
+				{
+					//Search method
+					
+				}
+				break;
+			case 2:
+				System.out.println("\t \t--Groups--");
+				System.out.println("\n");
+				System.out.println("a) ");
+				break;
+			case 3:
+				System.out.println("\t \t--Pages--");
+				break;
+			
+			
+			
+		}
+		/*mc.sendFriendRequest();
+		mc.acceptDenyRequest();
+		GroupsController gc = new GroupsController();
+		gc.joinGroup();
+		gc.createGroup();*/
+		
+
+	}
+
+}

@@ -1,0 +1,19 @@
+import controllers.*;
+
+public class SocialNetwork {
+
+	public static void main(String[] args) {
+		MemberController mc = new MemberController();
+		System.out.println("\t---------- ** WELCOME ** ----------\t \n");
+		System.out.println("--------------------------------------------------");
+		mc.login();
+		/*mc.sendFriendRequest();
+		mc.acceptDenyRequest();
+		GroupsController gc = new GroupsController();
+		gc.joinGroup();
+		gc.createGroup();*/
+		
+
+	}
+
+}
