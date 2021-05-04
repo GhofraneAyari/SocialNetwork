@@ -104,7 +104,7 @@ public class MemberController {
     }
     public void friendsLt()
     {
-		System.out.println("Your Friends List:");
+		System.out.println("Your Friends List is :");
 		ms.membersFriends();
 
 
@@ -113,14 +113,49 @@ public class MemberController {
         Scanner inputInt = new Scanner(System.in);
         Scanner inputString = new Scanner(System.in);
 
-        System.out.println("please choose the id of the friend friend timeline you want to write on:");
+        System.out.println("Please enter the ID of the memeber you would like to send a message to:");
         ms.membersFriends();
         int userWallId = inputInt.nextInt();
 
-        System.out.println("please choose the content of your msg:");
+        System.out.println("Please enter your message:");
         String content = inputString.nextLine();
 
         return ms.addToWall(userWallId,content);
     }
+    public void consultFriendTimeline() {
+    	Scanner input = new Scanner(System.in);
+    	System.out.println("Would you like to consult the posts on your timeline? (Y/N)");
+    	Scanner answer1 = new Scanner(System.in);
+    	Scanner answer2 = new Scanner(System.in);
+    	
+		String yesNo = answer1.nextLine();
+		if(yesNo.equals("Y") || yesNo.equals("y"))
+		{
+			ms.consultFriendTimelineById(MemberService.currentUser.getMember_id());
+		}
+		else {
+			
+			if(yesNo.equals("N") || yesNo.equals("n")){
+				
+				System.out.println("Would you like to consult posts on your friends timelines? (Y/N)");
+				String anw = answer2.nextLine();
+				if(anw.equals("Y") || anw.equals("y"))
+				{
+			        System.out.println("Please enter the ID of the member you would like to consult its timeline:");
+			        int memberId= input.nextInt();
+			        ms.consultFriendTimelineById(memberId);
+				}
+				else {
+					System.out.println("Okay!");
+				}
+				
+			}
+			
+		
+			
+		}
+    	
 
+        
+    }
 }

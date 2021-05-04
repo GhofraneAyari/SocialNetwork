@@ -9,7 +9,6 @@ INDEX VERSION 1.131+C:\Users\LENOVO\Downloads\SocialNetwork\SocialNetwork\.metad
 769398222.index
 3643736272.index
 658676981.index
-1067094681.index
 512056584.index
 2795265832.index
 3890964253.index
