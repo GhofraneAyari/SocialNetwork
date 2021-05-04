@@ -22,17 +22,19 @@ public class GroupsController {
 	public void createGroup() {
 		Scanner scanner = new Scanner(System.in);
 		Groups groups = new Groups();
-		String input;
-		System.out.println("Please enter the group name:");
-		input = scanner.nextLine();
-		groups.setGroupName(input);
-		System.out.println("Please enter the group genre:");
-		input = scanner.nextLine();
-		groups.setGenre(input);
+		String groupName;
+		String groupGenre;
+		System.out.println("Please enter the name of the group:");
+		groupName = scanner.nextLine();
+		groups.setGroupName(groupName);
+		System.out.println("Please enter the genre of the group:");
+		groupGenre = scanner.nextLine();
+		groups.setGenre(groupGenre);
 		groups.setCreationDate(LocalDate.now());
 		groups.setCreator(Cache.member);
 		try {
 			gs.createGroup(groups);
+			System.out.println("The group "+groupName+" was successfully created!");
 		} catch (SQLException sqlException)
 		{
 			sqlException.printStackTrace();

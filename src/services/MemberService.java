@@ -1,10 +1,6 @@
 package services;
 import models.Member;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.time.LocalDate;
+
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -12,8 +8,11 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Scanner;
 
+import com.mysql.jdbc.PreparedStatement;
+import models.Member;
 import utils.Cache;
 import utils.SingletonDatabaseConnection;
+
 
 
 public class MemberService {
@@ -93,24 +92,42 @@ public class MemberService {
 							"   AND u.userId <> "+ currentUser.getMember_id() +";" );
 			System.out.println("Here is the list of members available on the network:\n");
 			System.out.println("ID"+"\t"+"First Name"+"\t"+"Last Name"+"\t"+"Birthday"+"\t "+"City");
+
+			int count = 0;
+			
 			while(rs.next())
 			{
-					System.out.println(rs.getInt(1)+"\t "+rs.getString(2)+"\t \t "+rs.getString(3)+"\t \t "+rs.getDate(4)+"\t "+rs.getString(5));
+				count ++;	
+				System.out.println(rs.getInt(1)+"\t "+rs.getString(2)+"\t \t "+rs.getString(3)+"\t \t "+rs.getDate(4)+"\t "+rs.getString(5));
 			}
-			System.out.println("Would you like to send a friend request? (Y/N)");
-			Scanner input = new Scanner(System.in);
-			String yesNo = input.nextLine();
-			if(yesNo.equals("Y") || yesNo.equals("y")) {
-				System.out.println("Enter the ID of the member you would like to send a friend request to...");
-				input = new Scanner(System.in);
-				int response = input.nextInt();
-				Statement stmt2 = cnx.createStatement();
-				int test = stmt2.executeUpdate("INSERT INTO relationship(sender, receiver, status) VALUES("+currentUser.getMember_id()+","+response+","+ 0 +");");
-				if (test>0)
-					{
-						System.out.println("Your friend request was sent successfully!");
-					}
+			if (count == 0)
+			{
+				
+				System.out.println("There are not any members to send friends request to!");
 			}
+			else
+			{
+
+				System.out.println("Would you like to send a friend request? (Y/N)");
+				Scanner input = new Scanner(System.in);
+				String yesNo = input.nextLine();
+				if(yesNo.equals("Y") || yesNo.equals("y")) {
+					System.out.println("Enter the ID of the member you would like to send a friend request to...");
+					input = new Scanner(System.in);
+					int response = input.nextInt();
+					Statement stmt2 = cnx.createStatement();
+					int test = stmt2.executeUpdate("INSERT INTO relationship(sender, receiver, status) VALUES("+currentUser.getMember_id()+","+response+","+ 0 +");");
+					if (test>0)
+						{
+							System.out.println("Your friend request was sent successfully!");
+						}
+				}
+				else {
+					System.out.println("Maybe another time!");
+				}
+				
+			}
+			
 			System.out.println("\n");
 		
 		} catch (Exception e) {
@@ -126,7 +143,7 @@ public class MemberService {
 			ResultSet rs=stmt.executeQuery("SELECT relationshipId, user.firstName, user.lastName, status from relationship, user WHERE relationship.sender = user.userId and status=0 and receiver ="+ currentUser.getMember_id());
 			Scanner input = new Scanner(System.in);
 			if(rs.next() == false) {
-					System.out.println("You do not have any pending friends requests!");
+					System.out.println("You do not have any pending friend requests!");
 			
 			}else
 			{
@@ -180,9 +197,10 @@ public class MemberService {
 			Statement stmt=cnx.createStatement();
 			String req ="SELECT user.userId, user.firstName, user.lastName FROM user, relationship WHERE (relationship.status =1 AND ((relationship.receiver = user.userId AND relationship.sender= "+Cache.member.getMember_id()+") OR (relationship.receiver= "+Cache.member.getMember_id()+" AND relationship.sender = user.userId ))) ;";
 			rs = stmt.executeQuery(req);
+			System.out.println(" ID "+"\t \t"+ "First Name " +"\t"+"Last Name ");
 			while(rs.next())
 			{
-				System.out.println(rs.getInt(1)+"\t \t "+rs.getString(2)+"\t \t "+rs.getString(3));
+				System.out.println(" "+rs.getInt(1)+"\t \t  "+rs.getString(2)+"\t \t  "+rs.getString(3));
 			}
 
 
@@ -235,13 +253,14 @@ public class MemberService {
 			String req ="SELECT post.creationTime, user.firstName, user.lastName, post.content FROM post, user WHERE user.userId = post.creator AND post.wall_user_id = "+userwallId;
 			rs = stmt.executeQuery(req);
 			int count = 0;
+			System.out.println("  Date"+"\t \t  \t "+"  Sender"+"\t  \t  \t"+"Message");
 			while(rs.next())
 			{
 				count++;
-				System.out.println(rs.getDate(1)+"\t \t "+rs.getString(2)+"\t \t "+rs.getString(3)+"\t \t "+rs.getString(4));
+				System.out.println(rs.getDate(1)+"\t \t "+rs.getString(2)+" "+rs.getString(3)+"\t \t "+rs.getString(4));
 			}
 			if (count == 0) {
-				System.out.println("sorry this user don't have any post on his timeline");
+				System.out.println("Sorry, this timeline is empty!");
 			}
 
 		} catch (Exception e) {

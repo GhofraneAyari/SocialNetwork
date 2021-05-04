@@ -28,9 +28,9 @@ public class GroupsService {
 					"                       AND gm.groupId = g.groupId" +
 					"                  ) " + ";" );
 			System.out.println("Here is the list of groups available to you:\n");
-			System.out.println("ID " +"Group Name"+"  "+"Creation Date"+"    "+"Genre");
+			System.out.println(" ID\t  " +"Group Name"+"\t \t"+"Creation Date"+"\t \t"+"Genre");
 			while(rs.next()) {
-				System.out.println(" "+rs.getInt(1)+"   "+rs.getString(2)+"      "+rs.getDate(3)+"     "+rs.getString(4));}
+					System.out.println(" "+rs.getInt(1)+"\t   "+rs.getString(2)+"\t \t"+rs.getDate(3)+"\t \t "+rs.getString(4));}
 			System.out.println("---------------------------------------");
 			System.out.println("Would you like to join a group? (Y/N)");
 			Scanner input = new Scanner(System.in);
