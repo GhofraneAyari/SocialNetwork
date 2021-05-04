@@ -15,11 +15,11 @@ import java.sql.*;
 
 public class GroupsService {
 	public void joinGroup() {
-		try{  
-			
+		try{
+
 			Connection cnx= SingletonDatabaseConnection.getInstance().cnx;
-			Statement stmt1=cnx.createStatement();  
-		//	ResultSet rs=stmt1.executeQuery("Select * from groups"); //select only groups where not joined
+			Statement stmt1=cnx.createStatement();
+			//	ResultSet rs=stmt1.executeQuery("Select * from groups"); //select only groups where not joined
 			ResultSet rs=stmt1.executeQuery("select g.groupId, g.groupName, g.groupCreationDate, g.genre "
 					+ "from groups g "
 					+ "where NOT EXISTS ( SELECT 1 " +
@@ -30,12 +30,12 @@ public class GroupsService {
 			System.out.println("Here is the list of groups available to you:\n");
 			System.out.println("ID " +"Group Name"+"  "+"Creation Date"+"    "+"Genre");
 			while(rs.next()) {
-					System.out.println(" "+rs.getInt(1)+"   "+rs.getString(2)+"      "+rs.getDate(3)+"     "+rs.getString(4));}
+				System.out.println(" "+rs.getInt(1)+"   "+rs.getString(2)+"      "+rs.getDate(3)+"     "+rs.getString(4));}
 			System.out.println("---------------------------------------");
 			System.out.println("Would you like to join a group? (Y/N)");
 			Scanner input = new Scanner(System.in);
 			String yesNo = input.nextLine();
-			if(yesNo.equals("Y") || yesNo.equals("y")) 
+			if(yesNo.equals("Y") || yesNo.equals("y"))
 			{
 				System.out.println("Enter the ID of the group that you would like to join...");
 				int response = input.nextInt();
@@ -43,23 +43,23 @@ public class GroupsService {
 				int test = stmt2.executeUpdate("INSERT INTO groupmembers( groupId , userId ) VALUES("+response+","+ MemberService.currentUser.getMember_id()+ ");");
 				if (test>0){
 					System.out.println("You have joined the group number "+response+" successfully!");
-				 }
-					
-		
+				}
+
+
 			}
 			else {
-			 
+
 				System.out.println("Maybe next time!");}
-			 
-			
-			
-			
-	}catch(Exception e) {
-		System.out.println(e.getMessage());
-		
-	}
-		
-		
+
+
+
+
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+
+		}
+
+
 	}
 
 	public int createGroup(Groups groups) throws SQLException{

@@ -1,5 +1,10 @@
 package services;
 import models.Member;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.time.LocalDate;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -7,49 +12,68 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Scanner;
 
-import com.mysql.jdbc.PreparedStatement;
-
 import utils.Cache;
 import utils.SingletonDatabaseConnection;
 
 
 public class MemberService {
-	
+
 	public static Member currentUser = new Member();
-	
+
 	public Boolean login(String login, String password)
 	{
-		
+
 		try {
-			
+
 			Connection cnx= SingletonDatabaseConnection.getInstance().cnx ; 
 			Statement stmt=cnx.createStatement(); 
 			ResultSet rs=stmt.executeQuery("select * from user where login='"+login+"'and password='"+password+"';");  
 			
 			if(rs.next()) {
 				currentUser.setMember_id(rs.getInt(1));
-				currentUser.setFirstName(rs.getString(2));
-				currentUser.setLastName(rs.getString(3));
 				Cache.member = currentUser;
 				return true;
-				
+
 			}
-			  
+
 		}catch(Exception e){
 			System.out.println(e.getMessage());
-			
-			
+
+
 		}
-		
+
 		return false;
-		
-		
-		
-		 
+
 	}
+	public Boolean insert(Member member) {
+
+
+
+		try {
+
+
+			Connection cnx = SingletonDatabaseConnection.getInstance().cnx;
+			//use prepared statement to prevent sql injection
+			Statement stmt = cnx.createStatement();
+			stmt.executeUpdate("INSERT INTO user (firstName, lastName, birthday, gender, country, city, login, password)" + " VALUES (" + "\"" + member.getFirstName() + "\"" + "," + "\"" + member.getLastName() + "\"" + "," + "\"" + member.getBirthday() + "\"" + "," + "\"" + member.getGender() + "\"" + "," + "\"" + member.getCountry() + "\"" + ", " +   "\"" + member.getCity() +   "\"" + ", " +   "\"" + member.getLogin() +  "\"" + ", " +  "\"" + member.getPassword() +  "\"" + ");");
+			System.out.println("Account with username " + member.getLogin() + " has been created.");
+
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+
+
+		}
+
+		return false;
+
+	}
+
+
 
 	public void sendFriendRequest()
 	{
+		System.out.println("----------"+Cache.member.getMember_id());
 		try {
 			Connection cnx= SingletonDatabaseConnection.getInstance().cnx ; 
 			Statement stmt=cnx.createStatement();
@@ -132,8 +156,8 @@ public class MemberService {
 			}
 		
 		
-			
-			
+
+
 			
 			
 			
