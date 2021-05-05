@@ -8,16 +8,16 @@ public class Page extends SNS {
         return pageId;
     }
 
-    public void setPageId(int groupId) {
-        this.pageId = groupId;
+    public void setPageId(int pageId) {
+        this.pageId = pageId;
     }
 
     public String getPageName() {
         return pageName;
     }
 
-    public void setPageName(String groupName) {
-        this.pageName = groupName;
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
     }
 
 
