@@ -101,7 +101,7 @@ public class PageService {
             Statement stmt3 = cnx.createStatement();
             int test = stmt3.executeUpdate("INSERT INTO pagemanager( pageId , userId ) VALUES(" + pageid + "," + userid + ");");
             if (test > 0) {
-                System.out.println("User with ID " + userid + " is now admin to page with ID" + pageid);
+                System.out.println("User with ID " + userid + " is now admin to page with ID " + pageid);
             } else {
 
                 System.out.println("Maybe next time!");
@@ -148,7 +148,7 @@ public class PageService {
             int test = stmt3.executeUpdate("DELETE  FROM pagemanager( pageId , userId ) " +
                     "VALUES(" + pageid + "," + userid + ");");
             if (test > 0) {
-                System.out.println("User with ID " + userid + " is now admin to page with ID" + pageid);
+                System.out.println("User with ID " + userid + " is no longer managing the page with ID " + pageid);
             } else {
 
                 System.out.println("Maybe next time!");
