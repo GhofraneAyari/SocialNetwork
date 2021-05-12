@@ -101,5 +101,11 @@ public class Member {
 		this.password = password;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "ID=" + member_id +
+				", First name='" + firstName + '\'' +
+				", Last name='" + lastName + '\''
+				;
+	}
 }
