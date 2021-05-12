@@ -22,7 +22,7 @@ public class Validation {
     }
 
     public static void setBirthday(Member member, Scanner scanner) {
-        System.out.print(" Enter Date of birth (yyyy-MM-dd)=> ");
+        System.out.print(" Enter Birth date (YYYY-MM-DD)=> ");
         LocalDate birthday = null;
         try {
             birthday = LocalDate.parse(scanner.nextLine());
@@ -35,8 +35,23 @@ public class Validation {
 
 
     public static void setPassword(Member member, Scanner scanner) {
-        System.out.print(" Enter Password => ");
-        String password = scanner.nextLine();
+        String password ;
+        Console console = System.console();
+
+        if (console == null) {
+            System.out.println(ConsoleColors.RED_BOLD_BRIGHT+"Could not get console instance!!");
+            System.out.println("Warning: Your password is going to be clear.");
+            System.out.println(ConsoleColors.BLUE);
+            System.out.print(" Enter Password => ");
+            password = scanner.nextLine();
+        } else {
+            System.out.println("to build your project in line command while using jdbc :" +
+                    "java -cp .:/home/khlayil/Documents/workspace/social/SocialNetwork-Master/src/libs/mysql-connector-java-5.1.17-bin.jar SocialNetwork");
+
+            char[] passwordArray = console.readPassword("Enter your secret password: ");
+            password = String.valueOf(passwordArray);
+            System.out.println(password);
+        }
         if (password.length() < 4) {
             System.out.println("Password must contain at least 4 characters");
             setPassword(member,scanner);
